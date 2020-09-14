@@ -91,7 +91,7 @@ This is one of my first mods. If you find a better way of implementing these blo
 [Minecraft]: https://www.minecraft.net/
 [ae2]: https://www.curseforge.com/minecraft/mc-mods/applied-energistics-2
 [Discord]: https://discordapp.com/invite/Q3qxws6
-[curseforge]: https://www.curseforge.com/
+[curseforge]: https://www.curseforge.com/minecraft/mc-mods/extracpus
 [Extra Cells]: https://www.curseforge.com/minecraft/mc-mods/extracells2
 [releases]: https://github.com/RLNT/sinus-staff-list/releases
 [Forge]: http://files.minecraftforge.net/
