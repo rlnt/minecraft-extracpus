@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "normal": {
+      "model": "extracpus:16384k"
+    },
+    "formed=true,powered=false": {
+      "model": "extracpus:16384k_formed"
+    },
+    "formed=false,powered=true": {
+      "model": "extracpus:16384k"
+    },
+    "formed=true,powered=true": {
+      "model": "extracpus:16384k_light"
+    },
+    "formed=false,powered=false": {
+      "model": "extracpus:16384k"
+    }
+  }
+}
