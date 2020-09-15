@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "normal": {
+      "model": "extracpus:16384k"
+    }
+  }
+}
