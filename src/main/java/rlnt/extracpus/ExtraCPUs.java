@@ -1,5 +1,7 @@
 package rlnt.extracpus;
 
+import java.util.HashMap;
+
 import appeng.bootstrap.FeatureFactory;
 import appeng.bootstrap.IModelRegistry;
 import appeng.bootstrap.components.IBlockRegistrationComponent;
@@ -7,12 +9,12 @@ import appeng.bootstrap.components.IInitComponent;
 import appeng.bootstrap.components.IItemRegistrationComponent;
 import appeng.bootstrap.components.IModelRegistrationComponent;
 import appeng.bootstrap.components.IPreInitComponent;
-import appeng.core.Api;
-import appeng.core.ApiDefinitions;
+import appeng.core.features.AEFeature;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.event.RegistryEvent.Register;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
@@ -37,17 +39,19 @@ public class ExtraCPUs {
     public static final String MOD_NAME = "Extra CPUs";
     public static final String VERSION = "@VERSION@";
 
-	public static FeatureFactory ff = new FeatureFactory();
+	public static FeatureFactory ff = new FeatureFactory().features(AEFeature.CRAFTING_CPU);
+
+	static HashMap<String, IModel> map;
 
 	@EventHandler
 	public static void preInit(FMLPreInitializationEvent event) {
 
 		CraftingStorageBlocks.registerBlocks(ff);
 
-		ff.getBootstrapComponents(IPreInitComponent.class).forEachRemaining(b -> b.preInitialize(event.getSide()));
+		ff.getBootstrapComponents(IPreInitComponent.class).forEachRemaining(c -> c.preInitialize(event.getSide()));
 
-		GameRegistry.registerTileEntity(TileCraftingStorageTileEx.class,
-				new ResourceLocation(ExtraCPUs.MOD_ID, "TileCraftingStorageTileEx"));
+		GameRegistry.registerTileEntity(TileCraftingStorageTileEx.class, new ResourceLocation(ExtraCPUs.MOD_ID, "TileCraftingStorageTileEx"));
+
 	}
 
 	@EventHandler
@@ -79,8 +83,8 @@ public class ExtraCPUs {
 		final Side side = FMLCommonHandler.instance().getEffectiveSide();
 		ff.getBootstrapComponents(IItemRegistrationComponent.class)
 				.forEachRemaining(b -> b.itemRegistration(side, registry));
-	}
 
+	}
 
 
 }

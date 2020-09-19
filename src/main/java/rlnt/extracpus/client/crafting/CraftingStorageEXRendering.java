@@ -8,11 +8,13 @@ import appeng.block.crafting.BlockCraftingUnit.CraftingUnitType;
 import appeng.bootstrap.IBlockRendering;
 import appeng.bootstrap.IItemRendering;
 import appeng.client.render.crafting.CraftingCubeRendering;
+import appeng.client.render.crafting.CraftingMonitorTESR;
 import appeng.core.AppEng;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.util.ResourceLocation;
+import rlnt.extracpus.ExtraCPUs;
 
 public class CraftingStorageEXRendering extends CraftingCubeRendering {
 
@@ -30,22 +32,23 @@ public class CraftingStorageEXRendering extends CraftingCubeRendering {
 	@Override
 	public void customize(IBlockRendering rendering, IItemRendering itemRendering) {
 
-		ResourceLocation baseName = new ResourceLocation(AppEng.MOD_ID, registryName);
+		super.customize(rendering, itemRendering);
 
-		// Disable auto-rotation
-		rendering.modelCustomizer((loc, model) -> model);
+		ResourceLocation baseName = new ResourceLocation( ExtraCPUs.MOD_ID, this.registryName );
+
+			rendering.modelCustomizer( ( loc, model ) -> model );
 
 		// This is the standard blockstate model
-		ModelResourceLocation defaultModel = new ModelResourceLocation(baseName, "normal");
+		ModelResourceLocation defaultModel = new ModelResourceLocation( baseName, "normal" );
 
 		// This is the built-in model
-		String builtInName = "models/block/crafting/" + registryName + "/builtin";
-		ModelResourceLocation builtInModelName = new ModelResourceLocation(
-				new ResourceLocation(AppEng.MOD_ID, builtInName), "normal");
+		String builtInName = "models/block/" + this.registryName + "/builtin";
+		ModelResourceLocation builtInModelName = new ModelResourceLocation( new ResourceLocation( AppEng.MOD_ID, builtInName ), "normal" );
 
-		rendering.builtInModel(builtInName, new CraftingStorageEXModel(type));
+		rendering.builtInModel( builtInName, new CraftingStorageEXModel( this.type ) );
 
-		rendering.stateMapper(block -> mapState(block, defaultModel, builtInModelName));
+		rendering.stateMapper( block -> this.mapState( block, defaultModel, builtInModelName ) );
+
 	}
 
 	private Map<IBlockState, ModelResourceLocation> mapState(Block block, ModelResourceLocation defaultModel, ModelResourceLocation formedModel) {

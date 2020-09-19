@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "normal": {
+      "model": "extracpus:crafting_storage_4096k"
+    }
+  }
+}
