@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog][Keep a Changelog] and this project adh
 - blocks now also connect to original AE2 Crafting Storages
 - blocks now emit light when in the dark while being powered
 - remade some textures so they fit AE2 a bit more
+- 4096k Crafting Storage is now pink for a visible difference to the 1k Crafting Storage
 - general structure improvements and refactoring
 
 
