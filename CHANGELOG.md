@@ -5,7 +5,14 @@ The format is based on [Keep a Changelog][Keep a Changelog] and this project adh
 
 ## [Unreleased]
 
-## [1.1.0] - 2020-XX-XX
+- /
+
+
+---
+
+## [Released]
+
+## [1.1.0] - 2020-09-21
 
 ### Notes
 - although a lot of internal changes have been made in the mod, the new version is **still compatible** with your old world, nothing will be lost
@@ -19,10 +26,6 @@ The format is based on [Keep a Changelog][Keep a Changelog] and this project adh
 - 4096k Crafting Storage is now pink for a visible difference to the 1k Crafting Storage
 - general structure improvements and refactoring
 
-
----
-
-## [Released]
 
 ## [1.0.0] - 2020-09-14
 
@@ -39,4 +42,5 @@ The format is based on [Keep a Changelog][Keep a Changelog] and this project adh
 <!-- Versions -->
 [Unreleased]: https://github.com/RLNT/minecraft-extracpus/compare/v1.0.0...HEAD
 [Released]: https://github.com/RLNT/minecraft-extracpus/releases
+[1.1.0]: https://github.com/RLNT/minecraft-extracpus/compare/v1.0.0..v1.1.0
 [1.0.0]: https://github.com/RLNT/minecraft-extracpus/releases/v1.0.0
