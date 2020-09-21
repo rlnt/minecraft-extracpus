@@ -1,6 +1,6 @@
 {
   "parent": "block/cube_all",
   "textures": {
-    "all": "extracpus:blocks/256k"
+    "all": "extracpus:block/256k"
   }
 }
