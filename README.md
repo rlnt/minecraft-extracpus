@@ -26,7 +26,6 @@
   - [**📕 History**](#-history)
   - [**⏰ Changelog**](#-changelog)
   - [**🎓 License**](#-license)
-  - [**✨ Comment**](#-comment)
 </details>
 
 
@@ -49,14 +48,10 @@ The crafting recipes use the cells from [Extra Cells].
 
 
 ## **🐛 Limitations**
-Due to how [Applied Energistics 2][ae2] is made and built, there are some limitations you have to keep in mind:
+Due to how [Applied Energistics 2][ae2] is made and built, there is a limitation you have to keep in mind:
 
 - the Crafting Storage blocks of this mod will only work if at least one Crafting Storage block of the original mod [Applied Energistics 2][ae2] is in the same multiblock, otherwise they are just not being recognized by the ME system
-- they will not glow in the dark
-- they won't connect their textures properly
-  - they still recognize a valid multiblock structure
-  - i made different textures for valid and invalid structures
-  - they will have a brighter color when power is connected
+- so whenever you build a multiblock with the new Crafting Storages make sure that a minimum of 1 block of an Applied Energistics Crafting Storage is also included in the same multiblock
 
 
 ## **🔧 Installation**
@@ -74,6 +69,8 @@ He discontinued his mod and since it's running under the [GPL 3 license](./LICEN
 
 I am using a different approach for the new version and also remade the textures so it's more like an overhauled version.
 
+*Update:* Meanwhile, he joined the development of this mod so it's like a second edition now.
+
 
 ## **⏰ Changelog**
 Everything related to versions and their release notes can be found in the [changelog].
@@ -81,10 +78,6 @@ Everything related to versions and their release notes can be found in the [chan
 
 ## **🎓 License**
 This project is licensed under the [GPL 3].
-
-
-## **✨ Comment**
-This is one of my first mods. If you find a better way of implementing these blocks so their behaviour works properly, feel free to submit a [pull request].
 
 
 <!-- Links -->
