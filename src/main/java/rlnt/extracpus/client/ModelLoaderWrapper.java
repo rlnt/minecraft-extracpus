@@ -10,24 +10,23 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 
 public class ModelLoaderWrapper implements IModelRegistry {
+    @Override
+    public void registerItemVariants(Item item, ResourceLocation... names) {
+        ModelLoader.registerItemVariants(item, names);
+    }
 
-	@Override
-	public void registerItemVariants(Item item, ResourceLocation... names) {
-		ModelLoader.registerItemVariants(item, names);
-	}
+    @Override
+    public void setCustomModelResourceLocation(Item item, int metadata, ModelResourceLocation model) {
+        ModelLoader.setCustomModelResourceLocation(item, metadata, model);
+    }
 
-	@Override
-	public void setCustomModelResourceLocation(Item item, int metadata, ModelResourceLocation model) {
-		ModelLoader.setCustomModelResourceLocation(item, metadata, model);
-	}
+    @Override
+    public void setCustomMeshDefinition(Item item, ItemMeshDefinition meshDefinition) {
+        ModelLoader.setCustomMeshDefinition(item, meshDefinition);
+    }
 
-	@Override
-	public void setCustomMeshDefinition(Item item, ItemMeshDefinition meshDefinition) {
-		ModelLoader.setCustomMeshDefinition(item, meshDefinition);
-	}
-
-	@Override
-	public void setCustomStateMapper(Block block, IStateMapper mapper) {
-		ModelLoader.setCustomStateMapper(block, mapper);
-	}
+    @Override
+    public void setCustomStateMapper(Block block, IStateMapper mapper) {
+        ModelLoader.setCustomStateMapper(block, mapper);
+    }
 }
