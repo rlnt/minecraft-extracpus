@@ -1,3 +1,21 @@
+# User-specific stuff
+.idea/*
+!.idea/artifacts
+!.idea/compiler.xml
+!.idea/prettier.xml
+
+*.iml
+*.ipr
+*.iws
+
+# IntelliJ
+out/
+# mpeltonen/sbt-idea plugin
+.idea_modules/
+
+# JIRA plugin
+atlassian-ide-plugin.xml
+
 # Compiled class file
 *.class
 
@@ -6,9 +24,6 @@
 
 # BlueJ files
 *.ctxt
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
 
 # Package Files #
 *.jar
@@ -22,141 +37,97 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
-### Eclipse template
-.metadata
-bin/
-tmp/
-*.tmp
-*.bak
-*.swp
-*~.nib
-local.properties
-.settings/
-.loadpath
-.recommenders
+*~
 
-# External tool builders
-.externalToolBuilders/
+# temporary files which can be created if a process still has a handle open of a deleted file
+.fuse_hidden*
 
-# Locally stored "Eclipse launch configurations"
-*.launch
+# KDE directory preferences
+.directory
 
-# PyDev specific (Python IDE for Eclipse)
-*.pydevproject
+# Linux trash folder which might appear on any partition or disk
+.Trash-*
 
-# CDT-specific (C/C++ Development Tooling)
-.cproject
+# .nfs files are created when an open file is removed but is still being accessed
+.nfs*
 
-# CDT- autotools
-.autotools
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
 
-# Java annotation processor (APT)
-.factorypath
+# Icon must end with two \r
+Icon
 
-# PDT-specific (PHP Development Tools)
-.buildpath
+# Thumbnails
+._*
 
-# sbteclipse plugin
-.target
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
 
-# Tern plugin
-.tern-project
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
 
-# TeXlipse plugin
-.texlipse
+# Windows thumbnail cache files
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
 
-# STS (Spring Tool Suite)
-.springBeans
+# Dump file
+*.stackdump
 
-# Code Recommenders
-.recommenders/
+# Folder config file
+[Dd]esktop.ini
 
-# Annotation Processing
-.apt_generated/
-.apt_generated_test/
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
 
-# Scala IDE specific (Scala & Java development for Eclipse)
-.cache-main
-.scala_dependencies
-.worksheet
+# Windows Installer files
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
 
-### Gradle template
+# Windows shortcuts
+*.lnk
+
 .gradle
-**/build/
-!src/**/build/
+build/
 
 # Ignore Gradle GUI config
 gradle-app.setting
 
-# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
-!gradle-wrapper.jar
-
 # Cache of project
 .gradletasknamecache
 
-# User-specific stuff
-.idea/**/workspace.xml
-.idea/**/tasks.xml
-.idea/**/usage.statistics.xml
-.idea/**/dictionaries
-.idea/**/shelf
+**/build/
 
-# Generated files
-.idea/**/contentModel.xml
-
-# Sensitive or high-churn files
-.idea/**/dataSources/
-.idea/**/dataSources.ids
-.idea/**/dataSources.local.xml
-.idea/**/sqlDataSources.xml
-.idea/**/dynamic.xml
-.idea/**/uiDesigner.xml
-.idea/**/dbnavigator.xml
-
-# Gradle
-.idea/**/gradle.xml
-.idea/**/libraries
-
-# Gradle and Maven with auto-import
-.idea/artifacts
-.idea/compiler.xml
-.idea/jarRepositories.xml
-.idea/modules.xml
-.idea/*.iml
-.idea/modules
-*.iml
-*.ipr
-
-# CMake
-cmake-build-*/
-
-# Mongo Explorer plugin
-.idea/**/mongoSettings.xml
-
-# File-based project format
-*.iws
-
-# IntelliJ
-out/
+# Common working directory
 run/
 
-# mpeltonen/sbt-idea plugin
-.idea_modules/
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle-wrapper.jar
 
-# JIRA plugin
-atlassian-ide-plugin.xml
+# npm
+node_modules/
 
-# Cursive Clojure plugin
-.idea/replstate.xml
+# generated resources cache
+src/generated/resources/.cache/
 
-# Crashlytics plugin (for Android Studio and IntelliJ)
-com_crashlytics_export_strings.xml
-crashlytics.properties
-crashlytics-build.properties
-fabric.properties
-
-# Editor-based Rest Client
-.idea/httpRequests
-
-# Android studio 3.1+ serialized cache file
-.idea/caches/build_file_checksums.ser
+# vim
+.classpath
+.project
+.settings/
+bin/

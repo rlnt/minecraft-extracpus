@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact name="Copy Mod Files">
+    <output-path>$PROJECT_DIR$/build/classes/main</output-path>
+    <root id="root">
+      <element id="file-copy" path="$PROJECT_DIR$/build/resources/main/mcmod.info" />
+      <element id="file-copy" path="$PROJECT_DIR$/build/resources/main/pack.mcmeta" />
+    </root>
+  </artifact>
+</component>
