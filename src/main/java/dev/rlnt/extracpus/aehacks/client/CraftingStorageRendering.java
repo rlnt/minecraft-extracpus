@@ -1,18 +1,17 @@
-package rlnt.extracpus.client.render;
+package dev.rlnt.extracpus.aehacks.client;
 
 import appeng.block.crafting.BlockCraftingUnit;
 import appeng.bootstrap.IBlockRendering;
 import appeng.bootstrap.IItemRendering;
 import appeng.client.render.crafting.CraftingCubeRendering;
 import appeng.core.AppEng;
+import dev.rlnt.extracpus.Constants;
+import java.util.HashMap;
+import java.util.Map;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.util.ResourceLocation;
-import rlnt.extracpus.Constants;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class CraftingStorageRendering extends CraftingCubeRendering {
 
@@ -21,7 +20,6 @@ public class CraftingStorageRendering extends CraftingCubeRendering {
 
     public CraftingStorageRendering(String registryName, BlockCraftingUnit.CraftingUnitType type) {
         super(registryName, type);
-
         this.registryName = registryName;
         this.type = type;
     }
@@ -38,16 +36,23 @@ public class CraftingStorageRendering extends CraftingCubeRendering {
         ModelResourceLocation defaultModel = new ModelResourceLocation(baseName, "normal");
         // built-in model
         String builtInName = "models/block/" + this.registryName + "/builtin";
-        ModelResourceLocation builtInModel = new ModelResourceLocation(new ResourceLocation(AppEng.MOD_ID, builtInName), "normal");
+        ModelResourceLocation builtInModel = new ModelResourceLocation(
+            new ResourceLocation(AppEng.MOD_ID, builtInName),
+            "normal"
+        );
 
         blockRendering.builtInModel(builtInName, new CraftingStorageModel(this.type));
-        blockRendering.stateMapper(block -> this.mapState(block, defaultModel, builtInModel));
+        blockRendering.stateMapper(block -> this.mapStates(block, defaultModel, builtInModel));
     }
 
-    private Map<IBlockState, ModelResourceLocation> mapState(Block block, ModelResourceLocation defaultModel, ModelResourceLocation formedModel) {
+    private Map<IBlockState, ModelResourceLocation> mapStates(
+        Block block,
+        ModelResourceLocation defaultModel,
+        ModelResourceLocation formedModel
+    ) {
         Map<IBlockState, ModelResourceLocation> result = new HashMap<>();
         for (IBlockState state : block.getBlockState().getValidStates()) {
-            if (state.getValue(BlockCraftingUnit.FORMED)) {
+            if (state.getValue(BlockCraftingUnit.FORMED).equals(Boolean.TRUE)) {
                 // always use the builtin model if the multiblock is formed
                 result.put(state, formedModel);
             } else {

@@ -1,8 +1,13 @@
-package rlnt.extracpus.client.render;
+package dev.rlnt.extracpus.aehacks.client;
 
 import appeng.block.crafting.BlockCraftingUnit;
 import appeng.client.render.cablebus.CubeBuilder;
 import appeng.client.render.crafting.CraftingCubeState;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.List;
+import javax.annotation.Nullable;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
@@ -13,12 +18,6 @@ import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.property.IExtendedBlockState;
 
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.List;
-
 abstract class CraftingStorageModelBaked implements IBakedModel {
 
     private final VertexFormat format;
@@ -26,16 +25,36 @@ abstract class CraftingStorageModelBaked implements IBakedModel {
     private final TextureAtlasSprite ringHor;
     private final TextureAtlasSprite ringVer;
 
-    CraftingStorageModelBaked(VertexFormat format, TextureAtlasSprite ringCorner, TextureAtlasSprite ringHor, TextureAtlasSprite ringVer) {
+    CraftingStorageModelBaked(
+        VertexFormat format,
+        TextureAtlasSprite ringCorner,
+        TextureAtlasSprite ringHor,
+        TextureAtlasSprite ringVer
+    ) {
         this.format = format;
         this.ringCorner = ringCorner;
         this.ringHor = ringHor;
         this.ringVer = ringVer;
     }
 
-    @Override
-    public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
+    // Retrieve the cube connection state from the block state
+    // If none is present, just assume there are no adjacent crafting cube blocks
+    private static EnumSet<EnumFacing> getConnections(@Nullable IBlockState state) {
+        if (!(state instanceof IExtendedBlockState)) {
+            return EnumSet.noneOf(EnumFacing.class);
+        }
 
+        IExtendedBlockState extState = (IExtendedBlockState) state;
+        CraftingCubeState cubeState = extState.getValue(BlockCraftingUnit.STATE);
+        if (cubeState == null) {
+            return EnumSet.noneOf(EnumFacing.class);
+        }
+
+        return cubeState.getConnections();
+    }
+
+    @Override
+    public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
         if (side == null) {
             return Collections.emptyList();
         }
@@ -84,7 +103,39 @@ abstract class CraftingStorageModelBaked implements IBakedModel {
         return quads;
     }
 
-    private void addRing(CubeBuilder builder, @Nullable EnumFacing side, EnumSet<EnumFacing> connections) {
+    @Override
+    public boolean isAmbientOcclusion() {
+        return false;
+    }
+
+    @Override
+    public boolean isGui3d() {
+        return false;
+    }
+
+    @Override
+    public boolean isBuiltInRenderer() {
+        return false;
+    }
+
+    @Override
+    public TextureAtlasSprite getParticleTexture() {
+        return this.ringCorner;
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public ItemCameraTransforms getItemCameraTransforms() {
+        return ItemCameraTransforms.DEFAULT;
+    }
+
+    @Override
+    public ItemOverrideList getOverrides() {
+        return ItemOverrideList.NONE;
+    }
+
+    @SuppressWarnings("java:S3776")
+    private void addRing(CubeBuilder builder, EnumFacing side, EnumSet<EnumFacing> connections) {
         // Fill in the corners
         builder.setTexture(this.ringCorner);
         this.addCornerCap(builder, connections, side, EnumFacing.UP, EnumFacing.EAST, EnumFacing.NORTH);
@@ -103,7 +154,10 @@ abstract class CraftingStorageModelBaked implements IBakedModel {
             }
 
             // Select the horizontal or vertical ring texture depending on which side we're filling in
-            if ((side.getAxis() != EnumFacing.Axis.Y) && (a == EnumFacing.NORTH || a == EnumFacing.EAST || a == EnumFacing.WEST || a == EnumFacing.SOUTH)) {
+            if (
+                (side.getAxis() != EnumFacing.Axis.Y) &&
+                (a == EnumFacing.NORTH || a == EnumFacing.EAST || a == EnumFacing.WEST || a == EnumFacing.SOUTH)
+            ) {
                 builder.setTexture(this.ringVer);
             } else if (side.getAxis() == EnumFacing.Axis.Y && (a == EnumFacing.EAST || a == EnumFacing.WEST)) {
                 builder.setTexture(this.ringVer);
@@ -111,12 +165,17 @@ abstract class CraftingStorageModelBaked implements IBakedModel {
                 builder.setTexture(this.ringHor);
             }
 
-            // If there's an adjacent crafting cube block on side a, then the core of the block already extends
+            // If there's an adjacent crafting cube block on side A, then the core of the block already extends
             // fully to this side. So only bother drawing the stripe, if there's no connection.
             if (!connections.contains(a)) {
                 // Note that since we're drawing something that "looks" 2-dimensional,
                 // two of the following will always be 0 and 16.
-                float x1 = 0, y1 = 0, z1 = 0, x2 = 16, y2 = 16, z2 = 16;
+                float x1 = 0;
+                float y1 = 0;
+                float z1 = 0;
+                float x2 = 16;
+                float y2 = 16;
+                float z2 = 16;
 
                 switch (a) {
                     case DOWN:
@@ -125,7 +184,6 @@ abstract class CraftingStorageModelBaked implements IBakedModel {
                         break;
                     case UP:
                         y1 = 13.0f;
-                        y2 = 16;
                         break;
                     case WEST:
                         x1 = 0;
@@ -133,7 +191,6 @@ abstract class CraftingStorageModelBaked implements IBakedModel {
                         break;
                     case EAST:
                         x1 = 13;
-                        x2 = 16;
                         break;
                     case NORTH:
                         z1 = 0;
@@ -141,13 +198,12 @@ abstract class CraftingStorageModelBaked implements IBakedModel {
                         break;
                     case SOUTH:
                         z1 = 13;
-                        z2 = 16;
                         break;
                 }
 
-                // Constraint the stripe in the two directions perpendicular to a in case there has been a corner
-                // drawn in those directions. Since a corner is drawn if the three touching faces dont have adjacent
-                // crafting cube blocks, we'd have to check for a, side, and the perpendicular direction. But in this
+                // Constraint the stripe in the two directions perpendicular to A in case there has been a corner
+                // drawn in those directions. Since a corner is drawn if the three touching faces don't have adjacent
+                // crafting cube blocks, we'd have to check for A, side, and the perpendicular direction. But in this
                 // block, we've already checked for side (due to face culling) and a (see above).
                 EnumFacing perpendicular = a.rotateAround(side.getAxis());
                 for (EnumFacing cornerCandidate : EnumSet.of(perpendicular, perpendicular.getOpposite())) {
@@ -184,7 +240,14 @@ abstract class CraftingStorageModelBaked implements IBakedModel {
     /**
      * Adds a 3x3x3 corner cap to the cube builder if there are no adjacent crafting cubes on that corner.
      */
-    private void addCornerCap(CubeBuilder builder, EnumSet<EnumFacing> connections, EnumFacing side, EnumFacing down, EnumFacing west, EnumFacing north) {
+    private void addCornerCap(
+        CubeBuilder builder,
+        EnumSet<EnumFacing> connections,
+        EnumFacing side,
+        EnumFacing down,
+        EnumFacing west,
+        EnumFacing north
+    ) {
         if (connections.contains(down) || connections.contains(west) || connections.contains(north)) {
             return;
         }
@@ -203,51 +266,16 @@ abstract class CraftingStorageModelBaked implements IBakedModel {
         builder.addCube(x1, y1, z1, x2, y2, z2);
     }
 
-    // Retrieve the cube connection state from the block state
-    // If none is present, just assume there are no adjacent crafting cube blocks
-    private static EnumSet<EnumFacing> getConnections(@Nullable IBlockState state) {
-        if (!(state instanceof IExtendedBlockState)) {
-            return EnumSet.noneOf(EnumFacing.class);
-        }
-
-        IExtendedBlockState extState = (IExtendedBlockState) state;
-        CraftingCubeState cubeState = extState.getValue(BlockCraftingUnit.STATE);
-        if (cubeState == null) {
-            return EnumSet.noneOf(EnumFacing.class);
-        }
-
-        return cubeState.getConnections();
-    }
-
-    protected abstract void addInnerCube(EnumFacing facing, IBlockState state, CubeBuilder builder, float x1, float y1, float z1, float x2, float y2, float z2);
-
-    @Override
-    public boolean isAmbientOcclusion() {
-        return false;
-    }
-
-    @Override
-    public boolean isGui3d() {
-        return false;
-    }
-
-    @Override
-    public boolean isBuiltInRenderer() {
-        return false;
-    }
-
-    @Override
-    public TextureAtlasSprite getParticleTexture() {
-        return this.ringCorner;
-    }
-
-    @Override
-    public ItemCameraTransforms getItemCameraTransforms() {
-        return ItemCameraTransforms.DEFAULT;
-    }
-
-    @Override
-    public ItemOverrideList getOverrides() {
-        return ItemOverrideList.NONE;
-    }
+    @SuppressWarnings("java:S107")
+    protected abstract void addInnerCube(
+        EnumFacing facing,
+        @Nullable IBlockState state,
+        CubeBuilder builder,
+        float x1,
+        float y1,
+        float z1,
+        float x2,
+        float y2,
+        float z2
+    );
 }

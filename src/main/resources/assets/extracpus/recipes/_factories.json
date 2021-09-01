@@ -1,0 +1,5 @@
+{
+  "recipes": {
+    "universal_recipe": "dev.rlnt.extracpus.compat.UniversalRecipeFactory"
+  }
+}

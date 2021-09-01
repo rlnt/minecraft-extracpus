@@ -1,4 +1,4 @@
-package rlnt.extracpus.util;
+package dev.rlnt.extracpus.aehacks;
 
 import appeng.api.definitions.IBlockDefinition;
 import appeng.block.AEBaseTileBlock;
@@ -11,6 +11,15 @@ import appeng.core.AEConfig;
 import appeng.core.features.*;
 import appeng.tile.AEBaseTile;
 import appeng.util.Platform;
+import dev.rlnt.extracpus.Constants;
+import dev.rlnt.extracpus.ExtraCPUs;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.Supplier;
+import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
@@ -18,23 +27,34 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import rlnt.extracpus.Constants;
-import rlnt.extracpus.ExtraCPUs;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.function.BiFunction;
-import java.util.function.Supplier;
-
+@SuppressWarnings(
+    { "unchecked", "ConstantConditions", "java:S1905", "java:S2637", "java:S2259", "java:S4449", "java:S3011" }
+)
 public class FeatureFactoryHelper {
+
+    private FeatureFactoryHelper() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static IBlockDefinition build(FeatureFactory factory, IBlockBuilder builder) {
         String registryName = getPrivateFieldValue("registryName", String.class, builder);
-        TileEntityDefinition tileEntity = getPrivateFieldValue("tileEntityDefinition", TileEntityDefinition.class, builder);
-        List<BiFunction<Block, Item, IBootstrapComponent>> bootstrapComponents = getPrivateFieldValue("bootstrapComponents", List.class, builder);
+        TileEntityDefinition tileEntity = getPrivateFieldValue(
+            "tileEntityDefinition",
+            TileEntityDefinition.class,
+            builder
+        );
+        List<BiFunction<Block, Item, IBootstrapComponent>> bootstrapComponents = getPrivateFieldValue(
+            "bootstrapComponents",
+            List.class,
+            builder
+        );
 
-        if (!AEConfig.instance().areFeaturesEnabled((EnumSet<AEFeature>) getPrivateFieldValue("features", EnumSet.class, builder))) {
+        if (
+            !AEConfig
+                .instance()
+                .areFeaturesEnabled((EnumSet<AEFeature>) getPrivateFieldValue("features", EnumSet.class, builder))
+        ) {
             return new TileDefinition(registryName, null, null);
         }
 
@@ -49,7 +69,9 @@ public class FeatureFactoryHelper {
         if (blockItem != null) {
             blockItem.setRegistryName(Constants.MOD_ID, registryName);
             blockItem.setTranslationKey(Constants.MOD_ID + "." + registryName);
-            factory.addBootstrapComponent((IItemRegistrationComponent) (side, registry) -> registry.register(blockItem));
+            factory.addBootstrapComponent(
+                (IItemRegistrationComponent) (side, registry) -> registry.register(blockItem)
+            );
         }
 
         // add to creative tab
@@ -88,7 +110,15 @@ public class FeatureFactoryHelper {
 
         // return the block definition
         if (block instanceof AEBaseTileBlock) {
-            factory.addBootstrapComponent((IPreInitComponent) side -> AEBaseTile.registerTileItem(tileEntity == null ? ((AEBaseTileBlock) block).getTileEntityClass() : tileEntity.getTileEntityClass(), new BlockStackSrc(block, 0, ActivityState.Enabled)));
+            factory.addBootstrapComponent(
+                (IPreInitComponent) side ->
+                    AEBaseTile.registerTileItem(
+                        tileEntity == null
+                            ? ((AEBaseTileBlock) block).getTileEntityClass()
+                            : tileEntity.getTileEntityClass(),
+                        new BlockStackSrc(block, 0, ActivityState.Enabled)
+                    )
+            );
 
             if (tileEntity != null) {
                 factory.tileEntityComponent.addTileEntity(tileEntity);
@@ -101,17 +131,27 @@ public class FeatureFactoryHelper {
     }
 
     public static IBlockBuilder useCustomModel(IBlockBuilder builder) {
-        builder.rendering(new BlockRenderingCustomizer() {
-            @SideOnly(Side.CLIENT)
-            @Override
-            public void customize(IBlockRendering rendering, IItemRendering itemRendering) {
-                ModelResourceLocation model = new ModelResourceLocation(new ResourceLocation(Constants.MOD_ID, getPrivateFieldValue("registryName", String.class, builder)), "inventory");
-                itemRendering.model(model).variants(model);
+        builder.rendering(
+            new BlockRenderingCustomizer() {
+                @SideOnly(Side.CLIENT)
+                @Override
+                public void customize(IBlockRendering rendering, IItemRendering itemRendering) {
+                    ModelResourceLocation model = new ModelResourceLocation(
+                        new ResourceLocation(
+                            Constants.MOD_ID,
+                            getPrivateFieldValue("registryName", String.class, builder)
+                        ),
+                        "inventory"
+                    );
+                    itemRendering.model(model).variants(model);
+                }
             }
-        });
+        );
         return builder;
     }
 
+    @SuppressWarnings("unused")
+    @Nullable
     private static <T> T getPrivateFieldValue(String field, Class<T> clazz, Object instance) {
         try {
             Field f = instance.getClass().getDeclaredField(field);
@@ -123,6 +163,7 @@ public class FeatureFactoryHelper {
         }
     }
 
+    @Nullable
     private static ItemBlock constructItemFromBlock(Block block, IBlockBuilder builder) {
         try {
             Method m = builder.getClass().getDeclaredMethod("constructItemFromBlock", Block.class);

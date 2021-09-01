@@ -1,9 +1,15 @@
-package rlnt.extracpus;
+package dev.rlnt.extracpus;
+
+import static dev.rlnt.extracpus.Constants.MOD_ID;
 
 import appeng.bootstrap.FeatureFactory;
 import appeng.bootstrap.IModelRegistry;
 import appeng.bootstrap.components.*;
 import appeng.core.features.AEFeature;
+import dev.rlnt.extracpus.aehacks.ModelLoaderWrapper;
+import dev.rlnt.extracpus.block.CraftingStorageTile;
+import dev.rlnt.extracpus.setup.ModBlocks;
+import dev.rlnt.extracpus.setup.ModTab;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -19,34 +25,38 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
-import rlnt.extracpus.client.ModelLoaderWrapper;
-import rlnt.extracpus.init.ModBlocks;
-import rlnt.extracpus.init.ModTab;
-import rlnt.extracpus.tile.TileCraftingStorage;
 
-@Mod(modid = Constants.MOD_ID, name = Constants.MOD_NAME, version = Constants.VERSION, useMetadata = true)
+@Mod(modid = MOD_ID, useMetadata = true)
 @Mod.EventBusSubscriber
+@SuppressWarnings("java:S1118")
 public class ExtraCPUs {
 
     // creative tab
     public static final CreativeTabs MOD_TAB = new ModTab();
     // AE 2 Feature Factory
-    public static FeatureFactory ff = new FeatureFactory().features(AEFeature.CRAFTING_CPU);
+    public static final FeatureFactory FF = new FeatureFactory().features(AEFeature.CRAFTING_CPU);
 
     @Mod.EventHandler
     public static void preInit(FMLPreInitializationEvent event) {
         // register the new tile entity for the new blocks
-        GameRegistry.registerTileEntity(TileCraftingStorage.class, new ResourceLocation(Constants.MOD_ID, "TileCraftingStorage"));
+        GameRegistry.registerTileEntity(
+            CraftingStorageTile.class,
+            new ResourceLocation(Constants.MOD_ID, "TileCraftingStorage")
+        );
         // add the new blocks to the feature factory
-        ModBlocks.initBlocks(ff);
+        ModBlocks.init();
         // run pre init for new components in the feature factory
-        ff.getBootstrapComponents(IPreInitComponent.class).forEachRemaining(component -> component.preInitialize(event.getSide()));
+        FF
+            .getBootstrapComponents(IPreInitComponent.class)
+            .forEachRemaining(component -> component.preInitialize(event.getSide()));
     }
 
     @Mod.EventHandler
     public static void init(FMLInitializationEvent event) {
         // run init for new components in the feature factory
-        ff.getBootstrapComponents(IInitComponent.class).forEachRemaining(component -> component.initialize(event.getSide()));
+        FF
+            .getBootstrapComponents(IInitComponent.class)
+            .forEachRemaining(component -> component.initialize(event.getSide()));
     }
 
     // register the blocks with the feature factory
@@ -54,7 +64,9 @@ public class ExtraCPUs {
     public static void registerBlocks(RegistryEvent.Register<Block> event) {
         final IForgeRegistry<Block> registry = event.getRegistry();
         final Side side = FMLCommonHandler.instance().getEffectiveSide();
-        ff.getBootstrapComponents(IBlockRegistrationComponent.class).forEachRemaining(block -> block.blockRegistration(side, registry));
+        FF
+            .getBootstrapComponents(IBlockRegistrationComponent.class)
+            .forEachRemaining(block -> block.blockRegistration(side, registry));
     }
 
     // register the block items with the feature factory
@@ -62,7 +74,9 @@ public class ExtraCPUs {
     public static void registerBlockItems(RegistryEvent.Register<Item> event) {
         final IForgeRegistry<Item> registry = event.getRegistry();
         final Side side = FMLCommonHandler.instance().getEffectiveSide();
-        ff.getBootstrapComponents(IItemRegistrationComponent.class).forEachRemaining(blockItem -> blockItem.itemRegistration(side, registry));
+        FF
+            .getBootstrapComponents(IItemRegistrationComponent.class)
+            .forEachRemaining(blockItem -> blockItem.itemRegistration(side, registry));
     }
 
     // register the new model with the feature factory
@@ -71,6 +85,8 @@ public class ExtraCPUs {
     public static void registerModels(ModelRegistryEvent event) {
         final IModelRegistry registry = new ModelLoaderWrapper();
         final Side side = FMLCommonHandler.instance().getEffectiveSide();
-        ff.getBootstrapComponents(IModelRegistrationComponent.class).forEachRemaining(model -> model.modelRegistration(side, registry));
+        FF
+            .getBootstrapComponents(IModelRegistrationComponent.class)
+            .forEachRemaining(model -> model.modelRegistration(side, registry));
     }
 }

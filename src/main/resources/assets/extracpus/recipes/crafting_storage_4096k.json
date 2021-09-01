@@ -1,12 +1,12 @@
 {
-  "type": "minecraft:crafting_shapeless",
+  "type": "extracpus:universal_recipe",
   "ingredients": [
     {
-      "item": "appliedenergistics2:crafting_unit"
+      "item": "extracells:storage.component",
+      "data": 2
     },
     {
-      "item": "extracells:storage.physical",
-      "data": 2
+      "item": "appliedenergistics2:crafting_unit"
     }
   ],
   "result": {
