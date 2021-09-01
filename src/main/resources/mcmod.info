@@ -1,15 +1,15 @@
 [
     {
-        "modid": "extracpus",
-        "name": "Extra CPUs",
-        "description": "This mod gives you additional Crafting Storages with more capacity.",
-        "version": "${version}",
-        "mcversion": "${mcversion}",
-        "url": "https://github.com/RLNT/minecraft-extracpus",
-        "authorList": ["RLNT","Zoko061602"],
+        "modid": "${mod_id}",
+        "name": "${mod_name}",
+        "description": "${mod_description}",
+        "version": "${minecraft_version}-${mod_version}",
+        "mcversion": "${minecraft_version}",
+        "url": "https://github.com/${github_user}/${github_repo}",
+        "authorList": ["${mod_authors}"],
         "credits": "This is a port of the 'Extra Crafting Storage' mod by Zoko061602.",
         "useDependencyInformation": true,
-        "requiredMods": ["appliedenergistics2", "extracells"],
-        "dependencies": ["appliedenergistics2", "extracells"]
+        "requiredMods": ["appliedenergistics2"],
+        "dependencies": ["appliedenergistics2", "extracells", "aeadditions"]
     }
 ]
