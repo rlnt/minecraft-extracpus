@@ -2,6 +2,13 @@ name: CI
 
 on: [push, pull_request, workflow_dispatch]
 
+env:
+  NODE_VERSION: 16.8.0
+  PNPM_VERSION: 6.15.1
+  JAVA_VERSION: 11
+  JAR_NAME: 'extracpus'
+  FILE_NAME: 'ExtraCPUs'
+
 jobs:
   check:
     name: Lint & Build
@@ -15,28 +22,30 @@ jobs:
       - name: Gradle Wrapper Validation
         uses: gradle/wrapper-validation-action@v1.0.3
 
-      - name: Setup Node.js environment
+      - name: Setup NodeJS ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v2.2.0
         with:
-          node-version: '14'
-          cache: npm
+          node-version: ${{ env.NODE_VERSION }}
 
-      - name: Setup NPM Cache
-        uses: actions/cache@v2.1.5
+      - name: Setup pnpm Cache
+        uses: actions/cache@v2
         with:
-          path: node_modules
-          key: ${{ runner.os }}-npm
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-node${{ env.NODE_VERSION }}-${{ hashFiles('**/pnpm-lock.yaml') }}
 
-      - name: Install NPM Dependencies
-        run: npm ci
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2.0.1
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          run_install: true
 
       - name: Check Prettier Format
-        run: npx pretty-quick --check --verbose
+        run: pnpx pretty-quick --check --verbose
 
-      - name: Set up JDK 11
+      - name: Set up JDK ${{ env.JAVA_VERSION }}
         uses: actions/setup-java@v2
         with:
-          java-version: '11'
+          java-version: ${{ env.JAVA_VERSION }}
           distribution: 'adopt'
 
       - name: Make gradlew executable
@@ -61,7 +70,7 @@ jobs:
 
       - name: Analyze
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: ./gradlew sonarqube --info
 
@@ -88,10 +97,10 @@ jobs:
       - name: Gradle Wrapper Validation
         uses: gradle/wrapper-validation-action@v1.0.3
 
-      - name: Set up JDK 11
+      - name: Set up JDK ${{ env.JAVA_VERSION }}
         uses: actions/setup-java@v2
         with:
-          java-version: '11'
+          java-version: ${{ env.JAVA_VERSION }}
           distribution: 'adopt'
 
       - name: Make gradlew executable
@@ -120,7 +129,7 @@ jobs:
         run: ./gradlew jar --no-daemon
 
       - name: Find the jar
-        run: echo "JAR_FILE=$(find build/libs/extracpus-*-*.jar)" >> $GITHUB_ENV
+        run: echo "JAR_FILE=$(find build/libs/${{ env.JAR_NAME }}-*-*.jar)" >> $GITHUB_ENV
 
       - name: Extract Minecraft and Mod Version
         run: echo ${JAR_FILE%.*} | awk -F- '{ print "MINECRAFT_VERSION=" $2; print "MOD_VERSION=" $3; }' >> $GITHUB_ENV
@@ -128,12 +137,11 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: ExtraCPUs-${{ env.MINECRAFT_VERSION }}-${{ env.MOD_VERSION }}.jar
+          name: ${{ env.FILE_NAME }}-${{ env.MINECRAFT_VERSION }}-${{ env.MOD_VERSION }}.jar
           path: ${{ env.JAR_FILE }}
 
       - name: Release
         uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
