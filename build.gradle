@@ -122,7 +122,29 @@ jar {
     }
 }
 
+curseforge {
+    if (System.getenv('CF_API_KEY') != null) {
+        // GitHub actions
+        apiKey = System.getenv('CF_API_KEY')
+    } else {
+        // error prevention
+        apiKey = "none"
+    }
+    project {
+        id = '408089'
+        changelogType = 'markdown'
+        changelog = 'The whole changelog can be found [here](https://github.com/RLNT/minecraft_extracpus/blob/main/CHANGELOG.md).'
+        releaseType = 'release'
+        addGameVersion minecraft_version
+
+        mainArtifact(jar) {
+            displayName = "ExtraCPUs-${minecraft_version}-${mod_version}"
+        }
+    }
+}
+
 jar.finalizedBy('reobfJar')
+
 idea {
     module {
         outputDir = file('build/classes/main')

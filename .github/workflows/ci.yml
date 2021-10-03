@@ -146,3 +146,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           files: ${{ env.JAR_FILE }}
+
+      - name: Upload to CurseForge
+        run: ./gradlew curseforge
+        env:
+          CF_API_KEY: ${{ secrets.CF_API_KEY }}
