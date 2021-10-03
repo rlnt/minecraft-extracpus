@@ -17,6 +17,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -25,6 +26,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
+import org.apache.logging.log4j.Logger;
 
 @Mod(modid = MOD_ID, useMetadata = true)
 @Mod.EventBusSubscriber
@@ -36,8 +38,17 @@ public class ExtraCPUs {
     // AE 2 Feature Factory
     public static final FeatureFactory FF = new FeatureFactory().features(AEFeature.CRAFTING_CPU);
 
+    public static final boolean EXISTING_DEPENDENCY =
+        Loader.isModLoaded("extracells") || Loader.isModLoaded("aeadditions");
+
     @Mod.EventHandler
     public static void preInit(FMLPreInitializationEvent event) {
+        Logger logger = event.getModLog();
+        if (!EXISTING_DEPENDENCY) {
+            logger.warn("There is no dependency mod loaded for ExtraCPUs! It will not add any features.");
+            return;
+        }
+
         // register the new tile entity for the new blocks
         GameRegistry.registerTileEntity(
             CraftingStorageTile.class,
@@ -53,6 +64,8 @@ public class ExtraCPUs {
 
     @Mod.EventHandler
     public static void init(FMLInitializationEvent event) {
+        if (!EXISTING_DEPENDENCY) return;
+
         // run init for new components in the feature factory
         FF
             .getBootstrapComponents(IInitComponent.class)
@@ -62,8 +75,10 @@ public class ExtraCPUs {
     // register the blocks with the feature factory
     @SubscribeEvent
     public static void registerBlocks(RegistryEvent.Register<Block> event) {
-        final IForgeRegistry<Block> registry = event.getRegistry();
-        final Side side = FMLCommonHandler.instance().getEffectiveSide();
+        if (!EXISTING_DEPENDENCY) return;
+
+        IForgeRegistry<Block> registry = event.getRegistry();
+        Side side = FMLCommonHandler.instance().getEffectiveSide();
         FF
             .getBootstrapComponents(IBlockRegistrationComponent.class)
             .forEachRemaining(block -> block.blockRegistration(side, registry));
@@ -72,8 +87,10 @@ public class ExtraCPUs {
     // register the block items with the feature factory
     @SubscribeEvent
     public static void registerBlockItems(RegistryEvent.Register<Item> event) {
-        final IForgeRegistry<Item> registry = event.getRegistry();
-        final Side side = FMLCommonHandler.instance().getEffectiveSide();
+        if (!EXISTING_DEPENDENCY) return;
+
+        IForgeRegistry<Item> registry = event.getRegistry();
+        Side side = FMLCommonHandler.instance().getEffectiveSide();
         FF
             .getBootstrapComponents(IItemRegistrationComponent.class)
             .forEachRemaining(blockItem -> blockItem.itemRegistration(side, registry));
@@ -83,8 +100,10 @@ public class ExtraCPUs {
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public static void registerModels(ModelRegistryEvent event) {
-        final IModelRegistry registry = new ModelLoaderWrapper();
-        final Side side = FMLCommonHandler.instance().getEffectiveSide();
+        if (!EXISTING_DEPENDENCY) return;
+
+        IModelRegistry registry = new ModelLoaderWrapper();
+        Side side = FMLCommonHandler.instance().getEffectiveSide();
         FF
             .getBootstrapComponents(IModelRegistrationComponent.class)
             .forEachRemaining(model -> model.modelRegistration(side, registry));

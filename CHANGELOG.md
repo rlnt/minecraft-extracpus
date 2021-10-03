@@ -9,6 +9,21 @@ and this project adheres to [Semantic Versioning].
 - /
 
 
+## [1.2.1] - 2021-10-03
+
+### Added
+- dependency warnings
+  - you will now get warnings in the game log if you are missing a dependency mods (any of the ExtraCells mods)
+  - since we support multiple dependency mods now, we can't enforce a single loaded mod anymore
+  - it checks if at least one of the three compatible mods is loaded
+  - beside the warning in the log, the mod will also disable its content and show a barrier as creative tab icon
+- automatic CurseForge upload
+
+### Changed
+- to pnpm
+- handling of formatting to save actions
+
+
 ## [1.2.0] - 2021-09-01
 
 ### Added
@@ -64,7 +79,8 @@ and this project adheres to [Semantic Versioning].
 [semantic versioning]: https://semver.org/spec/v2.0.0.html
 
 <!-- Versions -->
-[unreleased]: https://github.com/RLNT/minecraft_extracpus/compare/v1.2.0...HEAD
+[unreleased]: https://github.com/RLNT/minecraft_extracpus/compare/v1.2.1...HEAD
+[1.2.1]: https://github.com/RLNT/minecraft_extracpus/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/RLNT/minecraft_extracpus/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/RLNT/minecraft_extracpus/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/RLNT/minecraft_extracpus/releases/tag/v1.0.0

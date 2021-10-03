@@ -8,7 +8,7 @@ public class CraftingStorageTile extends TileCraftingStorageTile {
     public int getStorageBytes() {
         if (this.world == null || this.notLoaded() || this.isInvalid()) return 0;
 
-        final CraftingStorageBlock unit = (CraftingStorageBlock) this.world.getBlockState(this.pos).getBlock();
+        CraftingStorageBlock unit = (CraftingStorageBlock) this.world.getBlockState(this.pos).getBlock();
         final int kiloScalar = 1024;
         switch (unit.type) {
             default:
