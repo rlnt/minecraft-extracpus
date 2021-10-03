@@ -12,9 +12,10 @@
   "tabWidth": 4,
   "trailingComma": "none",
   "useTabs": false,
+  "plugins": ["./node_modules/prettier-plugin-packagejson", "./node_modules/prettier-plugin-java"],
   "overrides": [
     {
-      "files": "*.{json,yml,yaml,prettierrc}",
+      "files": "*.{json,prettierrc,yml,yaml}",
       "options": {
         "tabWidth": 2
       }
