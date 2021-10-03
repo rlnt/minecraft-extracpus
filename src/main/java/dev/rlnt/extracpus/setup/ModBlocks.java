@@ -25,7 +25,7 @@ public class ModBlocks {
         STORAGE_4096K_ID,
         CraftingUnitType.STORAGE_16K
     );
-    public static final IBlockDefinition CRAFTING_STORAGE_16384K = registerBlock(
+    static final IBlockDefinition CRAFTING_STORAGE_16384K = registerBlock(
         STORAGE_16384K_ID,
         CraftingUnitType.STORAGE_64K
     );

@@ -5,7 +5,7 @@ import static dev.rlnt.extracpus.Constants.MOD_ID;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
@@ -33,7 +33,8 @@ public class UniversalRecipeFactory implements IRecipeFactory {
 
     public static class UniversalRecipe extends ShapelessOreRecipe {
 
-        public UniversalRecipe(ResourceLocation group, NonNullList<Ingredient> input, @Nonnull ItemStack result) {
+        @SuppressWarnings("WeakerAccess")
+        public UniversalRecipe(@Nullable ResourceLocation group, NonNullList<Ingredient> input, ItemStack result) {
             super(group, input, result);
         }
 
